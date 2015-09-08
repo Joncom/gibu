@@ -546,7 +546,6 @@ function Start () {
     }
     var width:int = mainLayer['width'];
     var height:int = mainLayer['height'];
-    var tilesize:int = mainLayer['tilesize'];
     var data:Array = mainLayer['data'];
     for(var y=0; y<height; y++) {
         var innerArray:Array = data[y];
