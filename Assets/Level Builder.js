@@ -497,7 +497,35 @@ var json:Hashtable = /*JSON[*/{
 
 //var speed:float = 2.0;
 
+var tileMaterials:Hashtable = {
+    2: null,
+    3: null
+};
+
+var tileColors:Hashtable = {
+    2: null,
+    3: null
+};
+
 function Start () {
+    var shaderText =
+        "Shader \"Alpha Additive\" {" +
+        "Properties { _Color (\"Main Color\", Color) = (1,1,1,0) }" +
+        "SubShader {" +
+        "    Tags { \"Queue\" = \"Transparent\" }" +
+        "    Pass {" +
+        "        Blend One One ZWrite Off ColorMask RGB" +
+        "        Material { Diffuse [_Color] Ambient [_Color] }" +
+        "        Lighting On" +
+        "        SetTexture [_Dummy] { combine primary double, primary }" +
+        "    }" +
+        "}" +
+        "}";
+    tileMaterials[2] = new Material(shaderText);
+    tileMaterials[3] = new Material(shaderText);
+    tileColors[2] = new Color(0xA0 / 255.0, 0xD0 / 255.0, 0xC0 / 255.0, 1);
+    tileColors[3] = new Color(0x18 / 255.0, 0xA0 / 255.0, 0x68 / 255.0, 1);
+
     var layers:Array;
     for(var key:String in json.Keys) {
         if(key === 'layer') {
@@ -523,7 +551,12 @@ function Start () {
     for(var y=0; y<height; y++) {
         var innerArray:Array = data[y];
         for(var x=0; x<height; x++) {
-            print(innerArray[x]);
+            var tile:int = innerArray[x];
+            var floorTile:boolean = (tile == 2);
+            var cube:GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.transform.position = Vector3(x, (floorTile ? -1.0 : 1.0) * 0.5, y);
+            cube.GetComponent.<Renderer>().material = tileMaterials[tile];
+            cube.GetComponent.<Renderer>().material.color = tileColors[tile];
         }
     }
 }
