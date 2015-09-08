@@ -550,7 +550,7 @@ function Start () {
     var data:Array = mainLayer['data'];
     for(var y=0; y<height; y++) {
         var innerArray:Array = data[y];
-        for(var x=0; x<height; x++) {
+        for(var x=0; x<width; x++) {
             var tile:int = innerArray[x];
             var floorTile:boolean = (tile == 2);
             var cube:GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
