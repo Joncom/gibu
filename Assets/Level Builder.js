@@ -553,7 +553,7 @@ function Start () {
             var tile:int = innerArray[x];
             var floorTile:boolean = (tile == 2);
             var cube:GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = Vector3(x, (floorTile ? -1.0 : 1.0) * 0.5, y);
+            cube.transform.position = Vector3(x, (floorTile ? -1.0 : 1.0) * 0.5, -y);
             cube.GetComponent.<Renderer>().material = tileMaterials[tile];
             cube.GetComponent.<Renderer>().material.color = tileColors[tile];
         }
