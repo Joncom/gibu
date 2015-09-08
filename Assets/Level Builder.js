@@ -558,4 +558,6 @@ function Start () {
             cube.GetComponent.<Renderer>().material.color = tileColors[tile];
         }
     }
+
+    Destroy(gameObject);
 }
