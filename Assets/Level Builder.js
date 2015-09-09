@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+import SocketIO;
+
 var json:Hashtable = /*JSON[*/{
     "layer": [
         {
@@ -108,5 +110,24 @@ function Start () {
         }
     }
 
+    var go:GameObject = gameObject.Find('SocketIO');
+    var socket:SocketIOComponent = go.GetComponent.<SocketIOComponent>();
+    socket.On('connect', OnConnect);
+    socket.On('disconnect', OnDisconnect);
+    //socket.On('ping', OnPing); // FIXME: Doesn't work??
+    //socket.Emit('pong');
+
     Destroy(gameObject);
+}
+
+function OnConnect() {
+    Debug.Log('Connected');
+}
+
+function OnDisconnect() {
+    Debug.Log('Disconnected');
+}
+
+function OnPing(uuid) {
+    Debug.Log('Received ping!');
 }
