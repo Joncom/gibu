@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694d974793bef9941bb63b22d0329b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  socket: {fileID: 0}
 --- !u!23 &875583594
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -445,6 +446,10 @@ Prefab:
     - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
       propertyPath: url
       value: ws://localhost:3000/socket.io/?EIO=4&transport=websocket
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+      propertyPath: autoConnect
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b30cc084d923f0645b55bba668610d48, type: 2}

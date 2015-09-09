@@ -58,6 +58,8 @@ var tileColors:Hashtable = {
     3: null
 };
 
+var socket:SocketIOComponent;
+
 function Start () {
     var shaderText =
         "Shader \"Alpha Additive\" {" +
@@ -111,23 +113,40 @@ function Start () {
     }
 
     var go:GameObject = gameObject.Find('SocketIO');
-    var socket:SocketIOComponent = go.GetComponent.<SocketIOComponent>();
+    socket = go.GetComponent.<SocketIOComponent>();
     socket.On('connect', OnConnect);
     socket.On('disconnect', OnDisconnect);
-    //socket.On('ping', OnPing); // FIXME: Doesn't work??
-    //socket.Emit('pong');
+    socket.On('info', OnInfo);
+    socket.On('snapshot', OnSnapshot);
+    socket.On('ping', OnPing);
 
     Destroy(gameObject);
 }
 
 function OnConnect() {
     Debug.Log('Connected');
+
+    // Send name to server.
+    var random:int = Mathf.Floor(Random.value * 1000);
+    var name:String = 'Player' + random;
+    socket.Emit('init', name);
 }
 
 function OnDisconnect() {
     Debug.Log('Disconnected');
+    socket.Close();
 }
 
-function OnPing(uuid) {
-    Debug.Log('Received ping!');
+function OnInfo(e:SocketIOEvent) {
+    Debug.Log('Received Info: ' + e.data);
+}
+
+function OnSnapshot(e:SocketIOEvent) {
+    Debug.Log('Received Snapshot: ' + e.data);
+}
+
+function OnPing(e:SocketIOEvent) {
+    Debug.Log('Received ping: ' + e.data);
+    var uuid = e.data;
+    socket.Emit('pong', uuid);
 }
