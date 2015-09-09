@@ -61,6 +61,8 @@ var tileColors:Hashtable = {
 var socket:SocketIOComponent;
 
 function Start () {
+    Application.runInBackground = true;
+
     var shaderText =
         "Shader \"Alpha Additive\" {" +
         "Properties { _Color (\"Main Color\", Color) = (1,1,1,0) }" +
