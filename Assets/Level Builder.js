@@ -2,6 +2,8 @@
 
 import SocketIO;
 
+var PlayerPrefab:GameObject;
+
 var json:Hashtable = /*JSON[*/{
     "layer": [
         {
@@ -114,6 +116,13 @@ function Start () {
         }
     }
 
+    for (var y2 = 0; y2 < 5; y2++) {
+        for (var x2 = 0; x2 < 5; x2++) {
+            Instantiate(PlayerPrefab, Vector3 (x2, -0.5, y2), Quaternion.identity);
+        }
+    }
+
+
     var go:GameObject = gameObject.Find('SocketIO');
     socket = go.GetComponent.<SocketIOComponent>();
     socket.On('connect', OnConnect);
@@ -145,6 +154,20 @@ function OnInfo(e:SocketIOEvent) {
 
 function OnSnapshot(e:SocketIOEvent) {
     Debug.Log('Received Snapshot: ' + e.data);
+
+    /*
+    // Create list of entities to MAYBE remove.
+    var entities_to_remove = {};
+    ig.game.entities.forEach(function(entity) {
+
+        // Only consider entites with names.
+        if(entity.name) {
+            entities_to_remove[entity.name] = entity;
+        }
+    });
+    */
+    var entities_to_remove:Hashtable = new Hashtable();
+    //for(var i)
 }
 
 function OnPing(e:SocketIOEvent) {
