@@ -4,6 +4,7 @@ import SocketIO;
 
 var PlayerPrefab:GameObject;
 var Players:Hashtable = new Hashtable();
+var LocalPlayerName:String;
 
 var json:Hashtable = /*JSON[*/{
     "layer": [
@@ -133,8 +134,8 @@ function OnConnect() {
 
     // Send name to server.
     var random:int = Mathf.Floor(Random.value * 1000);
-    var name:String = 'Player' + random;
-    socket.Emit('init', name);
+    LocalPlayerName = 'Player' + random;
+    socket.Emit('init', LocalPlayerName);
 }
 
 function OnDisconnect() {
