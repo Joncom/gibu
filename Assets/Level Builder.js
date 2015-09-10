@@ -3,6 +3,7 @@
 import SocketIO;
 
 var PlayerPrefab:GameObject;
+var Players:Hashtable = new Hashtable();
 
 var json:Hashtable = /*JSON[*/{
     "layer": [
@@ -116,13 +117,6 @@ function Start () {
         }
     }
 
-    for (var y2 = 0; y2 < 5; y2++) {
-        for (var x2 = 0; x2 < 5; x2++) {
-            Instantiate(PlayerPrefab, Vector3 (x2, -0.5, y2), Quaternion.identity);
-        }
-    }
-
-
     var go:GameObject = gameObject.Find('SocketIO');
     socket = go.GetComponent.<SocketIOComponent>();
     socket.On('connect', OnConnect);
@@ -153,7 +147,7 @@ function OnInfo(e:SocketIOEvent) {
 }
 
 function OnSnapshot(e:SocketIOEvent) {
-    Debug.Log('Received Snapshot: ' + e.data);
+    //Debug.Log('Received Snapshot: ' + e.data);
 
     /*
     // Create list of entities to MAYBE remove.
@@ -166,8 +160,37 @@ function OnSnapshot(e:SocketIOEvent) {
         }
     });
     */
-    var entities_to_remove:Hashtable = new Hashtable();
-    //for(var i)
+
+    // Remove any player prefabs which are present in snapshot
+    // ...
+
+    var tilesize = 16;
+    var snapshot = e.data;
+    var foo = snapshot['entities'];
+    //print(foo);
+    for(var type in foo.keys) {
+        //print(type);
+        var entities = foo[type];
+        for(var name in entities.keys) {
+            //print(name);
+            var entity = entities[name];
+            //print(entity);
+            if(type == 'EntityPlayer') {
+                //print(name);
+                if(Players[name] == null) {
+                    //print('player needs spawning');
+                    var pos = entity['pos'];
+                    var x:float = pos['x'].n / tilesize;
+                    var y:float = pos['y'].n / tilesize;
+                    //print(x);
+                    var vector = Vector3(x, 0.5, -y);
+                    print('spawning player');
+                    var player = Instantiate(PlayerPrefab, vector, Quaternion.identity);
+                    Players[name] = player;
+                }
+            }
+        }
+    }
 }
 
 function OnPing(e:SocketIOEvent) {
