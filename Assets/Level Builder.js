@@ -176,17 +176,21 @@ function OnSnapshot(e:SocketIOEvent) {
             var entity = entities[name];
             //print(entity);
             if(type == 'EntityPlayer') {
+                var player:GameObject;
+                var pos = entity['pos'];
+                var x:float = pos['x'].n / tilesize;
+                var y:float = -pos['y'].n / tilesize;
+                var vector = Vector3(x, 0.5, y);
+                //print(x);
                 //print(name);
                 if(Players[name] == null) {
                     //print('player needs spawning');
-                    var pos = entity['pos'];
-                    var x:float = pos['x'].n / tilesize;
-                    var y:float = pos['y'].n / tilesize;
-                    //print(x);
-                    var vector = Vector3(x, 0.5, -y);
                     print('spawning player');
-                    var player = Instantiate(PlayerPrefab, vector, Quaternion.identity);
+                    player = Instantiate(PlayerPrefab, vector, Quaternion.identity);
                     Players[name] = player;
+                } else {
+                    player = Players[name];
+                    player.transform.position = vector;
                 }
             }
         }
